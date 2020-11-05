@@ -19,19 +19,18 @@ birth[i] <= death[i]
         :type death: List[int]
         :rtype: int
         """
-        birth.sort()
-        death.sort()
-        ret, count = birth[0], 0
-        i = 0
-        for x in birth:
-            if x < death[i]:
-                count += 1
-                ret = x
-            elif x == death[i]:
-                ret = x
-            else:
-                i += 1
-        return ret
+        n = len(birth)
+        rec = [0] * 102
+        acc, aux, ret = 0, 0, 0
+        for i in range(n):
+            rec[birth[i] - 1900] += 1
+            rec[death[i] - 1900 + 1] -= 1
+        for i, x in enumerate(rec):
+            acc += x
+            if acc > aux:
+                aux = acc
+                ret = i
+        return ret + 1900
 
 
 def main():
@@ -44,6 +43,8 @@ def main():
                    [1987,1992,1967,1997,1963,1970,1944,1986,1997,1937,1971,1982,1980,1992,1995,1992,1991,1964,1985,
                     1938,1975,1964,1975,1961,1995,1985,1946,1989,1999,1994,1956,1984,1999,1966,1950,1993,1960,1939,
                     1990,1975,1982,1921,1964,1998,1969,1970,1965,1973,1958]  # 1956
+    birth, death = [1972,1908,1915,1957,1960,1948,1912,1903,1949,1977,1900,1957,1934,1929,1913,1902,1903,1901], \
+                   [1997,1932,1963,1997,1983,2000,1926,1962,1955,1997,1998,1989,1992,1975,1940,1903,1983,1969]
     test = Solution()
     ret = test.maxAliveYear(birth, death)
     print(ret)
