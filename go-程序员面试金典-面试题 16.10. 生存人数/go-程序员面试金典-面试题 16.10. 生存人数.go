@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"go/types"
-	"sort"
 )
 
 /*
@@ -22,7 +20,20 @@ birth[i] <= death[i]
  */
 
 func maxAliveYear(birth []int, death []int) int {
-
+	rec := [102]int{}
+	for i := 0; i < len(birth); i ++ {
+		rec[birth[i] - 1900] += 1
+		rec[death[i] - 1900 + 1] -= 1  // 死亡的当年也要计算这个人
+	}
+	acc, aux, ret := 0, 0, 0
+	for i, x := range rec {
+		acc += x
+		if acc > aux {
+			aux = acc
+			ret = i
+		}
+	}
+	return ret + 1900
 }
 
 func main() {
